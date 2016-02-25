@@ -1,6 +1,6 @@
 #ifndef __LIBS_DEFS_H__
 #define __LIBS_DEFS_H__
-// #TEST
+// #TEST TEST
 
 #ifndef NULL
 #define NULL ((void *)0)
