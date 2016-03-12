@@ -3,6 +3,11 @@
 #include <string.h>
 #include <sys/stat.h>
 
+// 这个文件可以理解为是对bootloader进行签名
+// 我们首先要求bootloader不大于510字节，读入这个文件
+// 然后，我们把512字节中的最后两个字节加上我们的签名0x55AA，然后出去。
+// 具体到实现方法上，注意异常处理的过程。
+
 int
 main(int argc, char *argv[]) {
     struct stat st;
