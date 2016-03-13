@@ -175,7 +175,7 @@ trap_dispatch(struct trapframe *tf) {
         c = cons_getc();
         cprintf("kbd [%03d] %c\n", c, c);
         break;
-    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
+    //LAB1 CHALLENGE 1 : 2013011413 you should modify below codes.
     case T_SWITCH_TOU:
 		// change segment registers ro User Mode
 		tf->tf_cs = USER_CS;
