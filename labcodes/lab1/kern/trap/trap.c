@@ -46,6 +46,17 @@ idt_init(void) {
       *     You don't know the meaning of this instruction? just google it! and check the libs/x86.h to know more.
       *     Notice: the argument of lidt is idt_pd. try to find it!
       */
+	// My Code starts
+	extern uintptr_t __vectors[];     // declaration code generted by vector.c
+	int i;
+	// fill in the idt
+	for (i = 0; i < 256; i++) {
+		// not trap, kernel's code/text, offset defined in vector.S, privilege 0
+		// macro defined in memlayout.h
+		SETGATE(idt[i], 0, GD_KTEXT, __vectors[i], DPL_KERNEL);
+	}
+	lidt(&idt_pd);
+	// My Code ends
 }
 
 static const char *
