@@ -532,6 +532,7 @@ call指令压栈，所以bootmain中ebp为0x7bf8。
 在lab1_switch_to_user中，调用T_SWITCH_TOU中断。
 注意从中断返回时，会多pop两位，并用这两位的值更新ss,sp，损坏堆栈。
 所以要先把栈压两位，并在从中断返回后修复esp。
+
 ```
 	asm volatile (
 	    "sub $0x8, %%esp \n"
