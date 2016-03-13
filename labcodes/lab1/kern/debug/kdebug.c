@@ -307,14 +307,16 @@ print_stackframe(void) {
 	uint32_t current_ebp = read_ebp();
 	uint32_t current_eip = read_eip();
 	
-	for (int i = 0; i < STACKFRAME_DEPTH; i++) {
+	int i;    //  ‘for’ loop initial declarations are not allowed here
+	for (i = 0; i < STACKFRAME_DEPTH; i++) {
 		cprintf("ebp:0x%08x eip:0x%08x ", current_ebp, current_eip);
 		// Cannot use printf, since we're writing a kernel, not an app!
 	    
 		cprintf("args:");
 		uint32_t *argbase = (uint32_t*)current_ebp + 2;       
 		// the first argument is 2 words away, return_address standing in between
-		for (int j = 0; j < 4; j++) {
+		int j;
+		for (j = 0; j < 4; j++) {
 			cprintf("0x%08x ", argbase[j]);
 		}
 		cprintf("\n");
