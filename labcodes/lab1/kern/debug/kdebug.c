@@ -309,6 +309,10 @@ print_stackframe(void) {
 	
 	int i;    //  ‘for’ loop initial declarations are not allowed here
 	for (i = 0; i < STACKFRAME_DEPTH; i++) {
+		if (current_ebp == 0) {
+			break;
+		}
+
 		cprintf("ebp:0x%08x eip:0x%08x ", current_ebp, current_eip);
 		// Cannot use printf, since we're writing a kernel, not an app!
 	    
@@ -323,8 +327,8 @@ print_stackframe(void) {
 		print_debuginfo(current_eip - 1);     // eip points to next instruction
 		
 		// moving to next frame on the stack
-		current_ebp = *((uint32_t*)current_ebp);      // ebp of last frame
 		current_eip = *((uint32_t*)current_ebp + 1);    // return address
+		current_ebp = *((uint32_t*)current_ebp);      // ebp of last frame
 	}
 	// My Code Ends
 }
