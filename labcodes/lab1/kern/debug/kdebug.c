@@ -67,7 +67,7 @@ static void
 stab_binsearch(const struct stab *stabs, int *region_left, int *region_right,
            int type, uintptr_t addr) {
     int l = *region_left, r = *region_right, any_matches = 0;
-
+	// For efficiency, the binsearch is not implemented in a recursive manner
     while (l <= r) {
         int true_m = (l + r) / 2, m = true_m;
 
@@ -244,6 +244,7 @@ print_debuginfo(uintptr_t eip) {
         fnname[j] = '\0';
         cprintf("    %s:%d: %s+%d\n", info.eip_file, info.eip_line,
                 fnname, eip - info.eip_fn_addr);
+		// print file, line, function name and location in the function
     }
 }
 
@@ -302,5 +303,27 @@ print_stackframe(void) {
       *           NOTICE: the calling funciton's return addr eip  = ss:[ebp+4]
       *                   the calling funciton's ebp = ss:[ebp]
       */
+	// My Code Starts
+	uint32_t current_ebp = read_ebp();
+	uint32_t current_eip = read_eip();
+	
+	for (int i = 0; i < STACKFRAME_DEPTH; i++) {
+		cprintf("ebp:0x%08x eip:0x%08x ", current_ebp, current_eip);
+		// Cannot use printf, since we're writing a kernel, not an app!
+	    
+		cprintf("args:");
+		uint32_t *argbase = (uint32_t*)current_ebp + 2;       
+		// the first argument is 2 words away, return_address standing in between
+		for (int j = 0; j < 4; j++) {
+			cprintf("0x%08x ", argbase[j]);
+		}
+		cprintf("\n");
+		print_debuginfo(current_eip - 1);     // eip points to next instruction
+		
+		// moving to next frame on the stack
+		current_ebp = *((uint32_t*)current_ebp);      // ebp of last frame
+		current_eip = ((uint32_t*)current_ebp)[1];    // return address
+	}
+	// My Code Ends
 }
 
