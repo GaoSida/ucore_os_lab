@@ -324,7 +324,7 @@ print_stackframe(void) {
 		
 		// moving to next frame on the stack
 		current_ebp = *((uint32_t*)current_ebp);      // ebp of last frame
-		current_eip = ((uint32_t*)current_ebp)[1];    // return address
+		current_eip = *((uint32_t*)current_ebp + 1);    // return address
 	}
 	// My Code Ends
 }
